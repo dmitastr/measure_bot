@@ -34,15 +34,13 @@ MEASURE_OPTIONS = [
         "id": "1",
         "title": "Винрейт",
         "description": "Узнай свой винрейт в играх!",
-        "text": get_random_measurement(
-            choices=[
-                {"value": 0, "text": "🎮 <b>Винрейт</b>\n\n✅ Ваш винрейт: {value}%. Надо поднажать!"},
-                {"value": 50, "text": "🎮 <b>Винрейт</b>\n\n✅ Вы выиграли {value}% игр!"},
-                {"value": 90, "text": "🎮 <b>Винрейт</b>\n\n✅ У вас {value}% побед!"},
-            ],
-            min_value=0,
-            max_value=100,
-        ),
+        "choices": [
+            {"value": 0, "text": "🎮 <b>Винрейт</b>\n\n✅ Ваш винрейт: {value}%. Надо поднажать!"},
+            {"value": 50, "text": "🎮 <b>Винрейт</b>\n\n✅ Вы выиграли {value}% игр!"},
+            {"value": 90, "text": "🎮 <b>Винрейт</b>\n\n✅ У вас {value}% побед!"},
+        ],
+        "min_value": 0,
+        "max_value": 100,
     },
 ]
 
@@ -62,13 +60,17 @@ async def inline_measure_handler(inline_query: InlineQuery):
                 title=measure["title"],
                 description=measure["description"],
                 input_message_content=InputTextMessageContent(
-                    message_text=measure["text"],
+                    message_text=get_random_measurement(
+                        choices=measure.get("choices", []),
+                        min_value=measure.get("min_value", 0),
+                        max_value=measure.get("max_value", 100)
+                    ),
                     parse_mode=ParseMode.HTML,
                 ),
             )
         )
 
-    await inline_query.answer(results, cache_time=1, is_personal=True)
+    await inline_query.answer(results,  is_personal=True)
 
 
 async def main():
