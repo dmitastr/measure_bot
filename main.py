@@ -10,6 +10,7 @@ from aiogram.enums import ParseMode
 API_TOKEN = os.getenv("BOT_TOKEN")
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 bot = Bot(token=API_TOKEN, default=DefaultBotProperties(
     parse_mode=ParseMode.HTML))
@@ -18,6 +19,7 @@ dp = Dispatcher()
 
 def get_random_measurement(choices: list[dict], min_value: int, max_value: int) -> str:
     value = random.randint(min_value, max_value)
+    logger.info(f"DEBUG: min={min_value}, max={max_value}, value={value}")
 
     for choice in choices[::-1]:
         if value >= choice.get("value", 0):
@@ -27,7 +29,7 @@ def get_random_measurement(choices: list[dict], min_value: int, max_value: int) 
     return choices[0].get("text", "").format(value=value)
 
 
-FOOD_OPTIONS = [
+MEASURE_OPTIONS = [
     {
         "id": "1",
         "title": "Винрейт",
@@ -46,21 +48,21 @@ FOOD_OPTIONS = [
 
 
 @dp.inline_query()
-async def inline_food_handler(inline_query: InlineQuery):
+async def inline_measure_handler(inline_query: InlineQuery):
     """
-    Показываем все варианты еды в инлайн-режиме.
+    Показываем все варианты измерений в инлайн-режиме.
     Текст с подтверждением сразу зашит в сообщение — никакой задержки не нужно.
     """
     results = []
 
-    for food in FOOD_OPTIONS:
+    for measure in MEASURE_OPTIONS:
         results.append(
             InlineQueryResultArticle(
-                id=food["id"],
-                title=food["title"],
-                description=food["description"],
+                id=measure["id"],
+                title=measure["title"],
+                description=measure["description"],
                 input_message_content=InputTextMessageContent(
-                    message_text=food["text"],
+                    message_text=measure["text"],
                     parse_mode=ParseMode.HTML,
                 ),
             )
