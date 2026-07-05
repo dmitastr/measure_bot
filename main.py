@@ -36,7 +36,7 @@ MEASURE_OPTIONS = [
         "description": "Узнай свой винрейт в играх!",
         "text": get_random_measurement(
             choices=[
-                {"value": 0, "text": "🎮 <b>Винрейт</b>\n\n✅ Ваш винрейт: {value}%"},
+                {"value": 0, "text": "🎮 <b>Винрейт</b>\n\n✅ Ваш винрейт: {value}%. Надо поднажать!"},
                 {"value": 50, "text": "🎮 <b>Винрейт</b>\n\n✅ Вы выиграли {value}% игр!"},
                 {"value": 90, "text": "🎮 <b>Винрейт</b>\n\n✅ У вас {value}% побед!"},
             ],
